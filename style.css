@@ -27,11 +27,13 @@
 li {
   float: right;
 }
-
 #menu > ul > li > ul > li > a{ /* links directly inside Projects*/
   text-align: none;
+  display: none;
 }
-
+#menu > ul > li > ul > li {
+  display: block;
+}
 a:link, a:visited {
   display: block;
   width: 120px;
