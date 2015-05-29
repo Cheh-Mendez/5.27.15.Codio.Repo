@@ -1,12 +1,332 @@
-<!--
-To change this template use Tools | Templates.
--->
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
-<head>
-    <title></title>
-</head>
-<body>
+<link rel="stylesheet" href="style.css" type="text/css" />
 
+<head>
+  <title>Official Mendez</title>
+</head>
+
+  
+<body>
+  <div class="header">
+    <div id="box">
+      <div id='menu' class='align-right'>
+        <ul>
+          <li class='active last'><a href='index.html'><span>Home</span></a>
+          </li>
+          <li class='sub' id="projects"><a href='#'><span>Projects</span></a>
+            <ul>
+              <li><a href='Vindinium.html'><span>Vindinium</span></a>
+              </li>
+              <li><a href='dropcalc.html'><span>Calculator</span></a>
+              </li>
+              <li><a href='Blender.html'><span>Blender</span></a>
+              </li>
+              <li class='last'><a href='Reflections.html'><span>Reflections</span></a>
+              </li>
+            </ul>
+          </li>
+          <li><a href='About.html'><span>About</span></a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id="vinbox">
+       <p id="vintro">WHAT IS VINDINIUM?</p>
+       <Pre id="vinpar">    Vindinium is a multi-player turn based dungeon crawling game. Each player has one hero that can move across a map. The objective is for players to amass the maximum quantity of gold during a predetermined number of turns. Players must take control of gold mines to produce gold; however, gold mines are protected by goblins. When a player defeats a goblin, he becomes owner of the gold mine and receives one gold per turn. Furthermore, the goblin now defends the mine against other players.
+
+    Heroes can fight each other. The survivor gets control of all his opponent's gold mines. The killed hero is immediately respawned with all his gold, but no mine.
+
+When going to the tavern, heroes can buy beers for gold, restoring their life points.
+
+    The objective is to create a computer program (a bot) that plays the game of Vindinium as intelligently as possible. It is recommended that you use one of the starter packages as a starting point.
+    
+    Vindinium is an Artificial Intelligence programming challenge. You have to take the control of a legendary hero using the programming language of your choice. You will fight with other AI for a predetermined number of turns and the hero with the greatest amount of gold will win.
+    </Pre>  
+  </div>
+  <div id="vinpic">
+    <img src=http://yveran.gus05.com/images/vindinium/vindinium.jpg>
+  </div>
+    <div id="vinbox2">
+       <p id="vintro">MY BOT</p>
+       <Pre id="vinpar">
+       To make this project work, I learned how these bots from the vindinium project worked, i used my previous knowledge of  javascripting along with some things i learned while conducting this project.		
+         
+         My Bot works by running a system of checks using if else statements that in turn if return true, launch a task or a system of tasks to control my bot. this process loops so i have a bot that is always doing something.  I set my bot to run down a hierarchy of decisions, with multiple limitations. for example, my bot runs the hierarchy of code from top to bottom, if the first if statement is true, it will set my task variable to whatever my first statement wants it to be. ex. if variable freeMines.mineCount (amount of all available free mines) is more than (>) bot.yourBot.mineCount (amount of my bots mines) then make task equal freemines ( task = "freemines" ) which when my code reaches down to the task variable and launches it, it will execute freemines, which will make my bot look for available free mines.		
+         
+----------------------------------------------------------------------------------------------------------------------
+         
+1.  var totalMines = [bot.bot1.mineCount + bot.bot2.mineCount + bot.bot3.mineCount + bot.bot4.mineCount + bot.freeMines.length]
+This code here is a variable i used to calculate the total amount of mines in any given game, its used to shorten code strings
+
+2.  var ratioMines = [totalMines * 0.75]
+This code takes the value of the first variable and creates a ratio from it that i use to dictate whether my bot decides which character to fight my prefed ratio of chance is 3/4. 
+
+3.  if (bot.freeMines.length === 0 && bot.yourBot.mineCount > totalMines){
+This code decides if i have enough mines to hide near a tavern and just gain coins 
+
+4.           task = ""build stamina"";}
+This code is what is executed by the statement above and is what dictates what actions my bot does
+
+5.  else (bot.yourBot.mineCount > ratioMines){
+              task = ""freemines"";}
+Here in this code i use my ratio variable to decide whether my bot should go after other mines until it has enough to complete the Else statement
+
+6.  else if (bot.bot1.life <bot.yourBot.life && bot.bot1.mineCount> (totalMines - bot.bot1.mineCount)){ task = ""attack bot1""; }
+if (task === ""attack bot1""      ) 
+This code is just like the one above except i use multiple variables and multiple if statements using the && script to make a MUCH more specific scenario that fi copmleted will nauch an attack towards bot player 1 
+this code specifically states, if bot 1 has less life than me and has the most mines, my bot will attack and take those mines, this code is repetead in succession from bot 1 to bot 4 to figure out which bot to kill for the best odds at gaining the most gold.
+
+7.           console.log(""Ending Bot#1's Life."")
+this code here simply states what code is executed in the terminal
+
+8.           myDir = bot.findPath(myPos, [bot.bot1.pos.x, bot.bot1.pos.y])
+this code is what our bots use for path guiding, by setting our new cordinates to the enemy cordinates	
+         
+         im proud of actually making a bot that ran in games and was successful a multitude of times. Seeing something that actually worked and that i created was most rewarding. If i had more time i would have loved to add the use of functions to make my code simpler with more advanced tasks, and the implementation of double drinking, maybe even some unique pathfinding		
+    </Pre>  
+  </div>
+  <div id="vcontent">  
+    <div id="htmlbox">
+      <p id="intro">THE CODE:</p>
+      <pre id="vinpar"><code>
+      
+        
+        var Bot = require('bot');
+var PF = require('pathfinding');
+//var bot = new Bot('jywfm4bh', 'training', 'http://vindinium.org');
+var bot = new Bot('vypelejx', 'arena', 'http://52.8.116.125:9000');
+var goDir;
+var Promise = require('bluebird');
+Bot.prototype.botBrain = function() {
+    return new Promise(function(resolve, reject) {
+        _this = bot;
+        
+        // Set myDir to what you want and it will set bot.goDir to that direction at the end.  Unless it is "none"
+        var myDir;
+        var myPos = [bot.yourBot.pos.x, bot.yourBot.pos.y];
+        var totalMines = [bot.bot1.mineCount + bot.bot2.mineCount + bot.bot3.mineCount + bot.bot4.mineCount + bot.freeMines.length]
+        var countedMines = [permutatedMines * 0.75]
+        var enemyBots = [];
+        if(bot.yourBot.id != 1) enemyBots.push(bot.bot1);
+        if(bot.yourBot.id != 2) enemyBots.push(bot.bot2);
+        if(bot.yourBot.id != 3) enemyBots.push(bot.bot3);
+        if(bot.yourBot.id != 4) enemyBots.push(bot.bot4);
+        
+        // These are statements with scenarios that if true, will launch a response //
+        // The if statement is a bot behavior geared towards large maps//
+        // The else statement is geared towards midum to smaller maps//
+        if(bot.freeMines.length >= 8)
+        {
+        /*Health Task*/
+        if(bot.yourBot.life < 36){
+            task = "build stamina";
+        }
+            
+        /*Random Free Mines*/
+        else if(bot.freeMines.length > 1){
+            task = "freemines";
+        }
+        
+        /*Specified Raids*/
+        else if (bot.bot1mines.length < bot.bot2mines.length < bot.bot3mines.length < bot.bot4mines.length){
+            task = "raid bot1";
+        }
+        else if (bot.bot2mines.length < bot.bot1mines.length < bot.bot3mines.length < bot.bot4mines.length){
+            task = "raid bot2";
+        }
+        else if (bot.bot3mines.length < bot.bot2mines.length < bot.bot1mines.length < bot.bot4mines.length){
+            task = "raid bot3";
+        }
+        else if (bot.bot4mines.length < bot.bot2mines.length < bot.bot3mines.length < bot.bot1mines.length){
+            task = "raid bot4";
+        } 
+        
+        /*Backup Health*/
+        else if (bot.yourBot.life < 51){
+            task = "build stamina";
+        }
+        }
+        else
+        {
+        /*Maneuvers*/   
+        if (bot.freeMines.length === 0 && bot.yourBot.mineCount > permutatedMines){
+            task = "build stamina";
+        }
+        else (bot.yourBot.mineCount > (totalMines * 0.75)){
+            task = "freemines";
+        }
+        
+        /*Health Task*/
+        else if(bot.yourBot.life < 26){
+            task = "build stamina";
+        }
+        
+        /*/*Defense*/
+        /*else if((bot.bot1.pos.x - bot.yourBot.pos.x) < 4 && (bot.bot1.pos.x - bot.yourBot.pos.x) >1){}*/
+        /*else if((bot.bot1.pos.y - bot.yourBot.pos.y) < 4){}*/
+            
+        /*Random Free Mines*/
+        else if(bot.freeMines.length > (bot.bot1mines.length + bot.bot2mines.length + bot.bot3mines.length + bot.bot4mines.length)){
+            task = "freemines";
+        }
+        
+        /*Specified Attacks*/
+        else if (bot.bot1.life < bot.yourBot.life && bot.bot1.mineCount > (bot.yourBot.mineCount + bot.bot2.mineCount + bot.bot3.mineCount + bot.bot4.mineCount)){
+            task = "attack bot1";
+            }
+        else if (bot.bot2.life < bot.yourBot.life && bot.bot2.mineCount > (bot.yourBot.mineCount + bot.bot1.mineCount + bot.bot3.mineCount + bot.bot4.mineCount)){
+            task = "attack bot2";
+            }
+        else if (bot.bot3.life < bot.yourBot.life && bot.bot3.mineCount > (bot.yourBot.mineCount + bot.bot1.mineCount + bot.bot2.mineCount + bot.bot4.mineCount)){
+            task = "attack bot3";
+            }
+        else if (bot.bot4.life < bot.yourBot.life && bot.bot4.mineCount > (bot.yourBot.mineCount + bot.bot1.mineCount + bot.bot2.mineCount + bot.bot3.mineCount)){
+            task = "attack bot4";
+        }
+        
+        else if (bot.bot1.life < bot.yourBot.life){
+            task = "attack bot1";
+            }
+        else if (bot.bot2.life < bot.yourBot.life){
+            task = "attack bot2";
+            }
+        else if (bot.bot3.life < bot.yourBot.life){
+            task = "attack bot3";
+            }
+        else if (bot.bot4.life < bot.yourBot.life){
+            task = "attack bot4";
+        }
+        
+        /*Specified Raids*/
+        else if (bot.bot1.mineCount < (bot.bot2.mineCount + bot.bot3.mineCount + bot.bot4.mineCount)){
+            task = "raid bot1";
+        }
+        else if (bot.bot2.mineCount < (bot.bot1.mineCount + bot.bot3.mineCount + bot.bot4.mineCount)){
+            task = "raid bot2";
+        }
+        else if (bot.bot3.mineCount < (bot.bot1.mineCount + bot.bot2.mineCount + bot.bot4.mineCount)){
+            task = "raid bot3";
+        }
+        else if (bot.bot4.mineCount < (bot.bot1.mineCount + bot.bot2.mineCount + bot.bot3.mineCount)){
+            task = "raid bot4";
+        } 
+        
+        /*Backup Health*/
+        else if (bot.yourBot.life < 51){
+            task = "build stamina";
+        }
+        
+        /*Attack Closest*/
+        else {
+            task = "attack closest";
+        }}
+        
+        // These are the actions launched if any scenarios are activated // 
+        if(task === "build stamina"    ) {
+            var closestTavern = bot.taverns[0];
+                for(i = 0; i < bot.taverns.length; i++) {
+                    if(bot.findDistance(myPos, closestTavern) > bot.findDistance(myPos, bot.taverns[i])) {
+                        closestTavern = bot.taverns[i];}}
+            
+            console.log("Building Stamina");
+            myDir = bot.findPath(myPos, closestTavern);
+        } 
+        if(task === "freemines"        ) {
+            var closestMine = bot.freeMines[0];
+            for(i = 0; i < bot.freeMines.length; i++) {
+                if(bot.findDistance(myPos, closestMine) > bot.findDistance(myPos, bot.freeMines[i])) {
+                    closestMine = bot.freeMines[i];
+                }
+            }
+            console.log("Claiming a Free Mine!");
+            myDir = bot.findPath(myPos, closestMine);
+        }
+        if(task === "attack bot1"      ) {
+            console.log("Ending Bot#1's Life.")
+            myDir = bot.findPath(myPos, [bot.bot1.pos.x, bot.bot1.pos.y])
+    }
+        if(task === "attack bot2"      ) {
+            console.log("Ending Bot#2's Life.")
+            myDir = bot.findPath(myPos, [bot.bot2.pos.x, bot.bot2.pos.y])
+    }
+        if(task === "attack bot3"      ) {
+            console.log("Ending Bot#3's Life.")
+            myDir = bot.findPath(myPos, [bot.bot3.pos.x, bot.bot3.pos.y])
+    }
+        if(task === "attack bot4"      ) {
+            console.log("Ending Bot#4's Life.")
+            myDir = bot.findPath(myPos, [bot.bot4.pos.x, bot.bot4.pos.y])
+    }
+        if(task === "raid bot1"        ) {
+            var closestMine = bot.bot1mines[0];
+                for(i = 0; i < bot.bot1mines.length; i++) {
+                    if(bot.findDistance(myPos, closestMine) > bot.findDistance(myPos, bot.bot1mines[i])) {
+                        closestMine = bot.bot1mines[i];}}
+            
+            console.log("Raiding Bot#1");
+            myDir = bot.findPath(myPos, closestMine);
+        }
+        if(task === "raid bot2"        ) {
+            var closestMine = bot.bot2mines[0];
+                for(i = 0; i < bot.bot2mines.length; i++) {
+                    if(bot.findDistance(myPos, closestMine) > bot.findDistance(myPos, bot.bot2mines[i])) {
+                        closestMine = bot.bot2mines[i];}}
+            
+            console.log("Raiding Bot#2");
+            myDir = bot.findPath(myPos, closestMine);
+        }
+        if(task === "raid bot3"        ) {
+            var closestMine = bot.bot3mines[0];
+                for(i = 0; i < bot.bo31mines.length; i++) {
+                    if(bot.findDistance(myPos, closestMine) > bot.findDistance(myPos, bot.bot3mines[i])) {
+                        closestMine = bot.bot3mines[i];}}
+            
+            console.log("Raiding Bot#3");
+            myDir = bot.findPath(myPos, closestMine);
+        }
+        if(task === "raid bot4"        ) {
+            var closestMine = bot.bot4mines[0];
+                for(i = 0; i < bot.bot4mines.length; i++) {
+                    if(bot.findDistance(myPos, closestMine) > bot.findDistance(myPos, bot.bot4mines[i])) {
+                        closestMine = bot.bot4mines[i];}}
+            
+            console.log("Raiding Bot#4");
+            myDir = bot.findPath(myPos, closestMine);
+        }
+        if(task === "attack closest"   ) {
+            var closestEnemy = enemyBots[0];
+                for(i = 0; i < enemyBots.length; i++){
+                    if(bot.findDistance(myPos, closestEnemy) > bot.findDistance(myPos, enemyBots[i])) {
+                        closestEnemy = enemyBots[i];}}
+        
+            console.log("Reaping Nearest Soul")
+            myDir = bot.findPath(myPos, [enemyBots.pos.x, enemyBots.pos.y])
+    }
+        
+        /*                                                                                                                              * 
+         * This Code Sets your direction based on myDir.  If you are trying to go to a place that you can't reach, you move randomly.   *
+         * Otherwise you move in the direction set by your code.  Feel free to change this code if you want.                            */
+        if(myDir === "none") {
+            console.log("No configurable Action.");
+            var rand = Math.floor(Math.random() * 4);
+            var dirs = ["north", "south", "east", "west"];
+            bot.goDir = dirs[rand];
+        } else {
+            bot.goDir = myDir;
+        }
+        
+        
+        
+        ///////////* DON'T REMOVE ANTYTHING BELOW THIS LINE *//////////////
+        resolve();
+    });
+}
+bot.runGame();
+      </code></pre>
+    </div>
+  </div>
+  <div id="footbox"></div>
 </body>
 </html>
